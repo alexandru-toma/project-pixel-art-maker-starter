@@ -4,19 +4,20 @@ $(function(){
     const inputForHeight = $('#input_height');
     const inputForWidth = $('#input_width');
 
-    $('#submit_button').on('click', function(event){
+    $('#submit_button').click(function(event){
         event.preventDefault();
         tablePixelCanvas.children().remove();
         getInputValues();
-        makeGrid();
+        makeGrid(gridHeight, gridWidth);
     });
 
+    tablePixelCanvas.click(function(e){
+        getInputValues();
+        let tdIndex = $('td', this).index(e.target);
+        $('td').eq(tdIndex).css('background-color', colorInput);
+    })
 
-    function makeGrid() {
-           designCanvas(gridHeight, gridWidth);
-       }
-       
-    function designCanvas(gridHeight, gridWidth){     
+    function makeGrid(gridHeight, gridWidth){     
            for(let i = 0; i < gridHeight; i++){
                 tablePixelCanvas.append('<tr></tr>');
                 for(let j = 0; j < gridWidth; j++){
@@ -26,7 +27,7 @@ $(function(){
         }
 
     function getInputValues(){
-        colorInput = $('#color_picker').val();
+        colorInput = $('#colorPicker').val();
         gridHeight = $('#input_height').val();
         gridWidth = $('#input_width').val();
     }
