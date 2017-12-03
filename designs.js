@@ -3,15 +3,17 @@ $(function(){
     const tablePixelCanvas = $('#pixel_canvas');
     const inputForHeight = $('#input_height');
     const inputForWidth = $('#input_width');
+    const errorLabel = $('#error_label');
 
     $('#submit_button').click(function(event){
         event.preventDefault();
+        errorLabel.text('');
         tablePixelCanvas.children().remove();
         getInputValues();
         makeGrid(gridHeight, gridWidth);
     });
 
-    $('#reset_button').click(function(){
+    $('#reset_button').click(function(event){
         event.preventDefault();
         location.reload();
     });
@@ -49,18 +51,35 @@ $(function(){
         return false;
     }
 
-    inputForHeight.on('change', function(event){       
-        if (!verifyPositiveNumberPicked($(this).val()) || !verifyValidNumberPicked($(this).val())) {
+    function verifyMaximNumberPicked(value){
+        if(value > 100)
+            return false;
+        return true; 
+    }
+
+    function setErrorLabel(){
+        errorLabel.text("Please insert a valid number! \nThe number has to be positive.\nThe number has to be between 0-100.")
+    }
+
+    function performValidation(value){
+        if (!verifyPositiveNumberPicked(value) 
+        || !verifyValidNumberPicked(value) 
+        || !verifyMaximNumberPicked(value)) {
             $('#input_height').val(1);
-            alert('You must pick a valid number !');
+            $('#input_width').val(1);
+            setErrorLabel();
         }
+    }
+
+    inputForHeight.on('change', function(event){
+        event.preventDefault();       
+        performValidation($(this).val());
     });
 
     inputForWidth.on('change', function(event){    
-        if (!verifyPositiveNumberPicked($(this).val()) || !verifyValidNumberPicked($(this).val())) {
-            $('#input_width').val(1);
-            alert('You must pick a valid number !');
-        }
+        event.preventDefault();      
+        performValidation($(this).val());
     });
+
 });
 
